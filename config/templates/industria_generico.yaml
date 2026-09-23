@@ -1,0 +1,43 @@
+# Template de nicho: FALLBACK GENÉRICO (qualquer CNAE sem template dedicado)
+# Use como base ao criar um template novo de nicho: copie este arquivo,
+# renomeie, e afie o gancho pra dor específica do subsetor (§6.1).
+# Placeholders: {{NOME}} {{EMPRESA}} {{NICHO}}
+#               {{NOME_REMETENTE}} {{CONTATO}} {{DETALHE}}
+#
+# ESTILO (pesquisa 2026 + Josh Braun "poke the bear"): abre com PERGUNTA que
+# expõe a dor oculta (rentabilidade por linha de produto). 3 parágrafos, ~80
+# palavras, UM pedido de interesse, fechamento suave. Cada parágrafo em uma
+# linha só (parece digitado à mão).
+
+nicho: "industria_generico"
+nome_exibicao: "indústria"
+gancho: >-
+  Muitos itens precificados e custo que oscila. Sem visão de rentabilidade por
+  produto, parte do portfólio vende abaixo do ideal.
+
+variantes:
+  prova_social_diagnostico:
+    assunto: "uma pergunta sobre as margens da {{EMPRESA}}"
+    corpo: |
+      Olá! Pergunta rápida sobre a {{EMPRESA}}: dá pra ver hoje a rentabilidade real de cada linha de produto, uma a uma?
+
+      Com muitos itens no portfólio e custo que oscila, é comum parte da linha vender abaixo do ideal sem ninguém perceber.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Não sei se é o caso de vocês, mas, se quiser, te mando 2 ou 3 pontos onde costumamos achar margem escondida na indústria. Faz sentido?
+
+      {{ASSINATURA}}
+
+      Se não for o caso, é só avisar.
+
+  pergunta_provocativa:
+    assunto: "uma pergunta sobre a precificação da {{EMPRESA}}"
+    corpo: |
+      Pergunta direta: a {{EMPRESA}} sabe hoje qual produto do portfólio dá lucro de verdade e qual só dá faturamento?
+
+      A maioria das indústrias não tem esse número por item e acaba tomando decisão de preço no escuro.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Se quiser, te mostro como a gente separa isso linha a linha. Quer que eu mande?
+
+      {{ASSINATURA}}
+
+      Se não fizer sentido, é só avisar.

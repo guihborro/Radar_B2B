@@ -1,0 +1,68 @@
+# =============================================================================
+# CADÊNCIA DE FOLLOW-UP — o 2º, 3º e 4º contato
+# -----------------------------------------------------------------------------
+# POR QUE ISTO EXISTE (dados de benchmark 2026):
+#   campanha de 1 e-mail  -> 3,0% de resposta
+#   campanha de 2 e-mails -> 4,8% (+60%)
+#   campanha de 3 e-mails -> 5,8% (+93%)
+#   58% das respostas vêm do 1º e-mail, mas 42% vêm dos follow-ups.
+#   A cadência 0-3-10-17 captura ~93% das respostas; depois disso o retorno vira
+#   negativo (sobe descadastro e reclamação de spam).
+#
+# CUSTO: zero. O follow-up vai para um e-mail que JÁ foi validado no 1º envio,
+# então não consome crédito do verificador.
+#
+# REGRA DE PARADA: quem responder, der bounce, pedir opt-out ou for marcado como
+# inválido sai da sequência automaticamente (ver finintegra/followup.py).
+# =============================================================================
+
+# Dias contados a partir do 1º e-mail (status "enviado" em data/enviados.csv).
+cadencia_dias: [3, 10, 17]
+
+# Um bloco por etapa, na ordem. Placeholders disponíveis:
+#   {{NOME}} {{EMPRESA}} {{NICHO}} {{NOME_REMETENTE}} {{CONTATO}}
+# O ASSUNTO não fica aqui: o follow-up reusa o assunto do 1º e-mail com "Re:"
+# na frente, para cair na mesma conversa e parecer continuação natural.
+#
+# Formato seguindo a pesquisa: curto (menos que o 1º e-mail), frases diretas,
+# UM único pedido, e de interesse ("faz sentido eu te mandar?") em vez de
+# pedido de reunião. Dois pedidos no mesmo e-mail criam hesitação e a saída
+# mais fácil do destinatário passa a ser não responder.
+etapas:
+  # --- Etapa 1 (dia 3): lembrete leve, assume que se perdeu na correria -------
+  - nome: "followup1"
+    corpo: |
+      Oi! Tudo bem?
+
+      Mandei um e-mail há alguns dias sobre a margem por produto da {{EMPRESA}} e imagino que tenha se perdido na correria.
+
+      Faz sentido eu te mandar 2 ou 3 pontos onde a gente costuma encontrar margem perdida em {{NICHO}}?
+
+      {{ASSINATURA}}
+
+      Se não fizer sentido, é só avisar que eu paro por aqui.
+
+  # --- Etapa 2 (dia 10): muda o ângulo, entrega valor concreto ----------------
+  - nome: "followup2"
+    corpo: |
+      Oi! Volto com algo mais concreto.
+
+      O que mais vemos em {{NICHO}}: custo de setup, retrabalho e ociosidade não entram no preço. Aí uma parte do portfólio vende no prejuízo sem ninguém perceber.
+
+      Quer que eu te mande como a gente identifica isso?
+
+      {{ASSINATURA}}
+
+      Se não for o caso, é só avisar.
+
+  # --- Etapa 3 (dia 17): encerramento. E-mail de despedida costuma ter a maior
+  # taxa de resposta da sequência, porque tira a pressão do destinatário. ------
+  - nome: "followup3"
+    corpo: |
+      Oi! Vou encerrar por aqui para não insistir.
+
+      Imagino que olhar a margem por produto não seja prioridade da {{EMPRESA}} agora, e tudo bem.
+
+      Se mudar, é só responder este e-mail que eu retomo.
+
+      {{ASSINATURA}}

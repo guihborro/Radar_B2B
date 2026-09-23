@@ -1,0 +1,45 @@
+# Template de nicho: METALMECÂNICA / USINAGEM SOB ENCOMENDA (CNAE 25)
+# Placeholders: {{NOME}} {{EMPRESA}} {{NICHO}}
+#               {{NOME_REMETENTE}} {{CONTATO}} {{DETALHE}}
+#
+# ESTILO (pesquisa 2026 + Josh Braun "poke the bear"): o dono ACHA que sabe a
+# margem dele — a dor é invisível. O e-mail abre com uma PERGUNTA que revela o
+# problema oculto, não com quem somos. 3 parágrafos, ~80 palavras, UM pedido de
+# interesse (não de reunião), fechamento suave.
+# IMPORTANTE: cada parágrafo é UMA linha só (sem quebras no meio da frase) — em
+# texto puro isso faz o e-mail parecer digitado à mão, não um template.
+
+nicho: "usinagem"
+nome_exibicao: "usinagem / metalmecânica"
+gancho: >-
+  Você cota cada peça/job e provavelmente não sabe a margem real por job. O
+  custo de hora-máquina, setup e material some no orçamento fechado.
+
+variantes:
+  # Variante padrão (pergunta que expõe a dor oculta + oferta de valor).
+  prova_social_diagnostico:
+    assunto: "uma pergunta sobre as margens da {{EMPRESA}}"
+    corpo: |
+      Olá! Pergunta rápida sobre a {{EMPRESA}}: dá pra ver hoje a margem real de cada job que vocês cotam, já com hora-máquina, setup e material?
+
+      A maioria das oficinas de usinagem não fecha esse número e acaba cotando alguns jobs no prejuízo sem perceber.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Não sei se é o caso de vocês, mas, se quiser, te mando 2 ou 3 pontos onde costumamos achar margem escondida nesse tipo de operação. Faz sentido?
+
+      {{ASSINATURA}}
+
+      Se não for o caso, é só avisar.
+
+  # Variante alternativa (pergunta mais direta, mesma lógica).
+  pergunta_provocativa:
+    assunto: "uma pergunta sobre a precificação da {{EMPRESA}}"
+    corpo: |
+      Pergunta direta: quando a {{EMPRESA}} fecha um orçamento, dá pra saber se aquele job específico deu lucro?
+
+      Na usinagem sob encomenda, setup e retrabalho quase nunca entram na conta, e parte dos jobs sai no vermelho sem ninguém notar.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Se quiser, te mostro como a gente separa os jobs que dão dinheiro dos que só dão faturamento. Quer que eu mande?
+
+      {{ASSINATURA}}
+
+      Se não fizer sentido, é só avisar.

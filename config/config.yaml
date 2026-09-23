@@ -1,0 +1,148 @@
+# =============================================================================
+# FinIntegra — Bloco central de customização (espelha §10 do brief)
+# -----------------------------------------------------------------------------
+# ESTE é o arquivo que você edita quando os sócios definirem a persona/ICP.
+# Nenhum desses valores está hardcoded no código. Os defaults abaixo são os
+# [RECOMENDAÇÃO] do brief — troque à vontade.
+#
+# Itens marcados "# TODO" dependem da descoberta com os sócios (§11). O pipeline
+# AVISA (e bloqueia o envio real) se você tentar disparar sem preenchê-los.
+# =============================================================================
+
+# === NEGÓCIO ===
+negocio:
+  nome_remetente: "Seu Nome"       # nome que assina os e-mails (EDITE)
+  empresa: "Sua Empresa"
+  tagline: "Sua tagline aqui"       # vai na assinatura, dá identidade sem logo
+  contato: "(11) 99999-9999"        # telefone/celular que vai na assinatura (EDITE)
+  ticket_medio: "R$X.000–Y.000"     # ticket médio da sua consultoria (EDITE)
+  projetos_por_mes: 4               # TODO: confirmar capacidade com os sócios
+
+# === ICP ===
+# A lista de CNAEs vive em config/cnaes.yaml (mais detalhada). Aqui ficam os
+# demais filtros de qualificação.
+icp:
+  cargos_decisor:
+    - "Sócio/Proprietário"
+    - "Diretor Financeiro"
+    - "Controller"
+    - "Diretor Comercial"
+  # Porte por nº de funcionários (proxy confiável — vem da Receita).
+  # Faturamento é filtro fraco, nunca corte duro (ver §3.3 do brief).
+  faixa_funcionarios:
+    min: 50
+    max: 500
+  regioes:                          # polos industriais (recomendação)
+    - "SP-interior"
+    - "RS"
+    - "SC"
+    - "MG"
+  # Faturamento só para ORDENAÇÃO (filtro fraco), nunca para excluir.
+  faturamento_min: null
+
+# === PROVA / COPY ===
+copy:
+  # PROVA SOCIAL: atualmente NÃO usada nos templates (removida a pedido).
+  # Para reativar, adicione uma frase aqui E {{RESULTADO_CASE}} em algum template.
+  resultado_case: ""
+  # Assuntos em rodízio: o sistema alterna igualmente entre estes, por empresa
+  # (mesma empresa = mesmo assunto sempre). Se vazio, usa o assunto do template.
+  # Aceita {{EMPRESA}}. A 1ª letra é capitalizada automaticamente.
+  assuntos_ab:
+    - "Tem produto da {{EMPRESA}} no vermelho?"
+    - "Quanto a {{EMPRESA}} perde de margem todo mês?"
+    - "A {{EMPRESA}} pode estar deixando dinheiro na mesa"
+    - "A {{EMPRESA}} sabe onde está perdendo margem?"
+    - "{{EMPRESA}}, vocês sabem a margem real de cada produto?"
+    - "Onde a {{EMPRESA}} perde dinheiro sem perceber"
+  # Variante A/B padrão. Opções: prova_social_diagnostico | pergunta_provocativa
+  variante_padrao: "prova_social_diagnostico"
+  variantes_ativas:
+    - "prova_social_diagnostico"
+    - "pergunta_provocativa"
+  # FORMATO do e-mail enviado (deliverabilidade):
+  #   texto -> texto puro, SEM logo/HTML. Parece e-mail pessoal 1-a-1, cai na aba
+  #            PRINCIPAL e evita Spam/Promoções. RECOMENDADO para cold outreach.
+  #   html  -> layout profissional com logo. Bonito, mas o Gmail costuma jogar na
+  #            aba PROMOÇÕES. Bom para newsletter/contato quente. A versão HTML
+  #            continua salva e disponível pelo comando `cli html`.
+  formato_email: "texto"
+  # O mapa CNAE -> template de nicho fica em config/templates/*.yaml.
+
+# === CANAIS ===
+canais:
+  # Cascata padrão (§5). Ajustável por tier abaixo: p/ dono de indústria
+  # pequena, telefone às vezes converte mais que e-mail — não é "plano C".
+  ordem_cascata_padrao: ["email", "linkedin", "telefone"]
+  ordem_cascata_por_tier:
+    tier1: ["email", "linkedin", "telefone"]
+    tier2: ["email", "linkedin", "telefone"]
+    tier3: ["telefone", "email", "linkedin"]
+  dominio_outbound: ""              # TODO: domínio SEPARADO p/ outbound (§9)
+
+# === FONTES E FERRAMENTAS ===
+# Cada chave seleciona uma implementação atrás de interface. Os defaults
+# "mock"/"dry_run" rodam SEM serviço pago e SEM enviar nada — modo seguro.
+ferramentas:
+  provedor_dados: "receita"         # mock | csv | receita | template | econodata | speedio | datastone
+  # PRODUÇÃO: troque para "neverbounce"/"zerobounce" (+ chave no .env) para
+  # validar de VERDADE antes de enviar. "mock" NÃO evita bounce — só para testes.
+  verificador_email: "zerobounce"   # mock | neverbounce | zerobounce | hunter
+  modelo_llm: "claude-sonnet-4-6"   # personalização (Claude API)
+  envio: "dry_run"                  # dry_run | smtp | instantly | smartlead | sendgrid
+  orquestrador: "codigo_proprio"
+  crm: ""                           # TODO: pipedrive | rd | hubspot
+
+# Envio por SMTP (quando envio == "smtp"). Usuário/senha vêm do .env
+# (SMTP_USUARIO / SMTP_SENHA). Gmail: ligue verificação em 2 etapas e use uma
+# "senha de app" (https://myaccount.google.com/apppasswords).
+smtp:
+  host: "smtp.gmail.com"
+  port: 587
+  remetente: ""                     # From completo; vazio = monta com nome_exibicao + SMTP_USUARIO
+  # Nome que aparece na CAIXA DE ENTRADA do destinatário (identidade sem logo).
+  # Vazio = mostra o e-mail cru (frio). Só o NOME; o endereço vem do SMTP_USUARIO.
+  nome_exibicao: "Seu Nome | Sua Empresa"
+
+# Caminho do CSV quando provedor_dados == "csv" (export do provedor).
+csv_import:
+  caminho: "data/import.csv"
+
+# Receita Federal (open data) — quando provedor_dados == "receita".
+# Baixe e descompacte os CSVs em `pasta` (ver instruções em
+# finintegra/sourcing/receita.py). Sem chave de API.
+receita:
+  pasta: "data/receita"
+  # A Receita NÃO tem faturamento. O proxy disponível é o PORTE, que é definido
+  # por faixa de faturamento:
+  #   01=ME     -> até ~R$30 mil/mês
+  #   03=EPP    -> ~R$30 mil a R$400 mil/mês
+  #   05=Demais -> acima de ~R$400 mil/mês
+  #   00=não informado
+  # Para "fatura >= ~R$100 mil/mês", use EPP+Demais. Para só os grandes (>R$400k/mês),
+  # use apenas ["05"]. [] = aceita todos.
+  portes: ["03", "05"]
+  situacao_ativa: true              # só empresas com situação cadastral ativa
+  # A Receita filtrada só por CNAE é um MAR DE MEIs; isto corta o micro:
+  excluir_empresario_individual: true   # remove MEI/Empresário Individual (natureza 2135)
+  capital_social_min: 0             # R$ — piso de capital social (proxy fraco). 0 = desligado
+
+# === OPERAÇÃO ===
+operacao:
+  multiplicador_lista: 3            # puxar 3–4x o alvo final (perda por camada)
+  n_amostra_auditoria: 25
+  bounce_rate_max: 0.04             # acima disso, PARA o envio (§9)
+  # AQUECIMENTO: teto de e-mails enviados por dia (o `rodar` respeita e conta os
+  # já enviados hoje). Comece baixo e suba ~semanalmente: 10 -> 20 -> 40 ...
+  limite_diario: 10
+  # Trava de segurança: enquanto true, NADA é enviado de verdade, mesmo com
+  # envio != dry_run. Vire para false conscientemente quando for pra produção.
+  modo_seguro: true
+  # Se preenchido, TODO envio vai para este e-mail (modo de teste) em vez do
+  # e-mail do lead — seguro para testar antes. Também é setado por
+  # `cli enviar-teste --para ...`. Vazio = envia para o e-mail real do lead.
+  email_teste: ""
+
+# === ARMAZENAMENTO ===
+storage:
+  db_path: "data/finintegra.sqlite"

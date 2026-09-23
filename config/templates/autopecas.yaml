@@ -1,0 +1,41 @@
+# Template de nicho: AUTOPEÇAS / PEÇAS E SUPORTE TÉCNICO (CNAE 29 e 4530)
+# Placeholders: {{NOME}} {{EMPRESA}} {{NICHO}}
+#               {{NOME_REMETENTE}} {{CONTATO}} {{DETALHE}}
+#
+# ESTILO (pesquisa 2026 + Josh Braun "poke the bear"): abre com PERGUNTA que
+# expõe a dor oculta (margem por SKU + risco de crédito à oficina). 3 parágrafos,
+# ~80 palavras, UM pedido de interesse, fechamento suave. Cada parágrafo em uma
+# linha só (parece digitado à mão).
+
+nicho: "autopecas"
+nome_exibicao: "autopeças"
+gancho: >-
+  Crédito às oficinas e margem por SKU: muitos itens precificados e prazo dado
+  a cliente, com risco de perder margem por linha e por inadimplência junto.
+
+variantes:
+  prova_social_diagnostico:
+    assunto: "uma pergunta sobre as margens da {{EMPRESA}}"
+    corpo: |
+      Olá! Pergunta rápida sobre a {{EMPRESA}}: dá pra enxergar hoje a margem real por linha de peça, e quanto de prazo dá pra dar à oficina sem risco?
+
+      A maioria das distribuidoras de autopeças acaba perdendo dos dois lados, no preço e na inadimplência, sem ver isso com clareza.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Não sei se é o caso de vocês, mas, se quiser, te mando 2 ou 3 pontos onde costumamos achar margem escondida nesse setor. Faz sentido?
+
+      {{ASSINATURA}}
+
+      Se não for o caso, é só avisar.
+
+  pergunta_provocativa:
+    assunto: "uma pergunta sobre a margem da {{EMPRESA}}"
+    corpo: |
+      Pergunta direta: vocês sabem hoje a margem real por SKU da {{EMPRESA}}, e quanto de crédito à oficina dá pra assumir sem apertar o caixa?
+
+      A maioria das distribuidoras não tem esse número claro e acaba perdendo no preço e na inadimplência ao mesmo tempo.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Se quiser, te mostro como a gente cruza margem e risco de crédito. Quer que eu mande?
+
+      {{ASSINATURA}}
+
+      Se não fizer sentido, é só avisar.

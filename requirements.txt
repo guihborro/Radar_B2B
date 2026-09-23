@@ -1,0 +1,9 @@
+# FinIntegra — dependências do pipeline (Fase 2)
+# Mantido enxuto de propósito. Cada integração externa fica atrás de uma
+# interface; só instale o que for usar.
+
+pyyaml>=6.0            # leitura dos arquivos de config
+python-dotenv>=1.0     # carregar segredos do .env
+anthropic>=0.40        # personalização via Claude API (claude-sonnet-4-6)
+requests>=2.31         # chamadas HTTP a provedores/verificadores
+dnspython>=2.4         # checagem de MX (domínio recebe e-mail?) antes de enviar

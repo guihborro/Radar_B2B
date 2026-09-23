@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matchmaker — {{ resumo.total }} empresas encontradas</title>
+<style>
+  :root { --verde:#173b32; --acento:#1f7a5e; --linha:#e2e6ea; --cinza:#6b7680; --bg:#f4f6f8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:#1f2a30; }
+  .wrap { max-width:1200px; margin:0 auto; padding:28px 20px 64px; }
+  h1 { margin:0 0 4px; font-size:23px; color:var(--verde); }
+  .sub { color:var(--cinza); margin:0 0 18px; font-size:14px; }
+  .barra { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
+  .tag { background:#eaf3ef; color:var(--acento); border:1px solid #cfe6dc; border-radius:20px; padding:5px 12px; font-size:12.5px; }
+  .acoes { margin-left:auto; display:flex; gap:10px; }
+  a.btn { text-decoration:none; display:inline-block; padding:10px 18px; border-radius:9px; font-size:14px; font-weight:600; }
+  .btn-prim { background:var(--verde); color:#fff; }
+  .btn-sec { background:#fff; color:var(--verde); border:1px solid var(--linha); }
+  .scroll-topo { overflow-x:auto; overflow-y:hidden; margin-bottom:4px; }
+  .scroll-topo > div { height:1px; }
+  .tabela-wrap { overflow-x:auto; background:#fff; border:1px solid var(--linha); border-radius:12px; }
+  /* força a barra de rolagem a aparecer SEMPRE (Chrome/Edge escondem por padrão) */
+  .scroll-topo::-webkit-scrollbar, .tabela-wrap::-webkit-scrollbar { height:13px; }
+  .scroll-topo::-webkit-scrollbar-track, .tabela-wrap::-webkit-scrollbar-track { background:#eaeef2; border-radius:7px; }
+  .scroll-topo::-webkit-scrollbar-thumb, .tabela-wrap::-webkit-scrollbar-thumb { background:#b6c1c9; border-radius:7px; border:2px solid #eaeef2; }
+  .scroll-topo::-webkit-scrollbar-thumb:hover, .tabela-wrap::-webkit-scrollbar-thumb:hover { background:#94a2ac; }
+  .scroll-topo { scrollbar-width:thin; scrollbar-color:#b6c1c9 #eaeef2; }
+  table { border-collapse:collapse; width:100%; font-size:13px; }
+  th, td { padding:6px 10px; text-align:left; border-bottom:1px solid var(--linha); white-space:nowrap; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  th { background:#fafbfc; color:var(--cinza); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; position:sticky; top:0; }
+  .tabela-wrap td a { color:#1f7a5e; text-decoration:none; font-weight:600; white-space:nowrap; }
+  .tabela-wrap td a:hover { text-decoration:underline; }
+  .score { display:inline-block; min-width:34px; text-align:center; font-weight:700; color:#fff; border-radius:6px; padding:3px 7px; }
+  .vazio { background:#fff; border:1px solid var(--linha); border-radius:12px; padding:40px; text-align:center; color:var(--cinza); }
+  .rank { color:var(--cinza); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>{{ resumo.total }} empresas encontradas</h1>
+  <p class="sub">Ordenadas por encaixe (score). Reveja e exporte para trabalhar a lista.</p>
+
+  <div class="barra">
+    <span class="tag">Setores: {{ resumo.setores }}</span>
+    <span class="tag">Região: {{ resumo.ufs }}</span>
+    <span class="tag">Porte: {{ resumo.portes }}</span>
+    <span class="tag">Capital mín.: {{ resumo.capital_min }}</span>
+    <span class="tag">Idade: {{ resumo.idade_min }}</span>
+    <div class="acoes">
+      {% if linhas %}<a class="btn btn-prim" href="/baixar/{{ token }}.xlsx">Baixar Excel</a>
+      <a class="btn btn-sec" href="/baixar/{{ token }}.csv">CSV</a>{% endif %}
+      <a class="btn btn-sec" href="/">Nova busca</a>
+    </div>
+  </div>
+
+  {% if not linhas %}
+    <div class="vazio">Nenhuma empresa bateu com esses critérios. Tente afrouxar os filtros (menos exigências, mais setores ou região).</div>
+  {% else %}
+  <div class="scroll-topo"><div></div></div>
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Empresa</th><th>Setor</th><th>Cidade</th><th>UF</th><th>Porte</th>
+          <th>Capital</th><th>Anos</th><th>Decisor</th><th>E-mail</th><th>Telefone</th>
+          <th>Site</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for l in linhas %}
+        <tr>
+          <td class="rank">{{ loop.index }}</td>
+          <td>{{ l.empresa }}</td>
+          <td>{{ l.setor }}</td>
+          <td>{{ l.cidade }}</td>
+          <td>{{ l.uf }}</td>
+          <td>{{ l.porte }}</td>
+          <td class="num">{{ l.capital }}</td>
+          <td class="num">{{ l.idade }}</td>
+          <td>{{ l.decisor }}</td>
+          <td>{{ l.email or '—' }}</td>
+          <td>{{ l.telefone }}</td>
+          <td><a href="{{ l.site }}" target="_blank" rel="noopener">{{ 'buscar ↗' if 'google.com/search' in l.site else 'site ↗' }}</a></td>
+          <td class="num"><span class="score" style="background:{{ '#1f7a5e' if l.score>=60 else '#c99a2e' if l.score>=35 else '#9aa4ac' }}">{{ l.score }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+<script>
+  // corrimão no TOPO da tabela: barra horizontal sincronizada com a de baixo
+  (function () {
+    var topo = document.querySelector('.scroll-topo');
+    var wrap = document.querySelector('.tabela-wrap');
+    if (!topo || !wrap) return;
+    var tabela = wrap.querySelector('table');
+    function ajusta() { topo.firstElementChild.style.width = tabela.scrollWidth + 'px'; }
+    ajusta();
+    window.addEventListener('resize', ajusta);
+    var travado = false;
+    topo.addEventListener('scroll', function () {
+      if (travado) return; travado = true; wrap.scrollLeft = topo.scrollLeft; travado = false;
+    });
+    wrap.addEventListener('scroll', function () {
+      if (travado) return; travado = true; topo.scrollLeft = wrap.scrollLeft; travado = false;
+    });
+  })();
+</script>
+</body>
+</html>

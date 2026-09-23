@@ -1,0 +1,41 @@
+# Template de nicho: AGRONEGÓCIO (CNAE 01 agricultura/pecuária e 4623 insumos)
+# Placeholders: {{NOME}} {{EMPRESA}} {{NICHO}}
+#               {{NOME_REMETENTE}} {{CONTATO}} {{DETALHE}}
+#
+# ESTILO (pesquisa 2026 + Josh Braun "poke the bear"): abre com PERGUNTA que
+# expõe a dor oculta (rentabilidade por cultura com insumo/preço oscilando).
+# 3 parágrafos, ~80 palavras, UM pedido de interesse, fechamento suave. Cada
+# parágrafo em uma linha só (parece digitado à mão).
+
+nicho: "agro"
+nome_exibicao: "agronegócio"
+gancho: >-
+  Insumos e commodities voláteis apertam a rentabilidade por cultura. Sem um
+  modelo de custos claro, é difícil saber onde a operação ganha ou perde.
+
+variantes:
+  prova_social_diagnostico:
+    assunto: "Rentabilidade por cultura na {{EMPRESA}}"
+    corpo: |
+      Olá! Pergunta rápida sobre a {{EMPRESA}}: dá pra ver hoje a rentabilidade real de cada cultura, já com a oscilação de insumos e de preço de venda?
+
+      No agro, sem um modelo de custos claro, fica difícil saber onde a operação ganha ou perde de verdade.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Não sei se é o caso de vocês, mas, se quiser, te mando 2 ou 3 pontos onde costumamos achar margem escondida nesse tipo de operação. Faz sentido?
+
+      {{ASSINATURA}}
+
+      Se não for o caso, é só avisar.
+
+  pergunta_provocativa:
+    assunto: "uma pergunta sobre os custos da {{EMPRESA}}"
+    corpo: |
+      Pergunta direta: a {{EMPRESA}} sabe hoje qual cultura dá o melhor retorno, já considerando insumo e preço de venda oscilando?
+
+      A maioria das operações do agro decide plantio e venda no feeling, sem esse número fechado.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Se quiser, te mostro como a gente monta o custo por cultura. Quer que eu mande?
+
+      {{ASSINATURA}}
+
+      Se não fizer sentido, é só avisar.

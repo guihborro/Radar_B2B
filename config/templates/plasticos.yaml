@@ -1,0 +1,41 @@
+# Template de nicho: TRANSFORMAÇÃO DE PLÁSTICOS (CNAE 22)
+# Placeholders: {{NOME}} {{EMPRESA}} {{NICHO}}
+#               {{NOME_REMETENTE}} {{CONTATO}} {{DETALHE}}
+#
+# ESTILO (pesquisa 2026 + Josh Braun "poke the bear"): abre com PERGUNTA que
+# expõe a dor oculta (resina oscila e a margem por item vai junto). 3 parágrafos,
+# ~80 palavras, UM pedido de interesse, fechamento suave. Cada parágrafo em uma
+# linha só (parece digitado à mão).
+
+nicho: "plasticos"
+nome_exibicao: "transformação de plásticos"
+gancho: >-
+  O custo da resina oscila e a margem por produto vai junto. Sem visão por
+  item, dá pra estar vendendo SKU no prejuízo sem saber.
+
+variantes:
+  prova_social_diagnostico:
+    assunto: "uma pergunta sobre as margens da {{EMPRESA}}"
+    corpo: |
+      Olá! Pergunta rápida sobre a {{EMPRESA}}: quando a resina sobe, dá pra ver na hora qual passa a ser a margem real de cada produto?
+
+      Na transformação de plásticos essa oscilação derruba a rentabilidade, e alguns itens acabam vendidos no prejuízo sem ninguém perceber.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Não sei se é o caso de vocês, mas, se quiser, te mando 2 ou 3 pontos onde costumamos achar margem escondida nesse tipo de operação. Faz sentido?
+
+      {{ASSINATURA}}
+
+      Se não for o caso, é só avisar.
+
+  pergunta_provocativa:
+    assunto: "uma pergunta sobre a precificação da {{EMPRESA}}"
+    corpo: |
+      Pergunta direta: a cada alta da resina, a {{EMPRESA}} consegue repassar o preço certo por produto, ou vai no feeling?
+
+      A maioria das empresas de plásticos não acompanha isso item a item e acaba cobrando abaixo do ideal em parte do portfólio.
+
+      Sou o {{NOME_REMETENTE}}, da FinIntegra. Se quiser, te mostro como a gente amarra o preço à variação da resina. Quer que eu mande?
+
+      {{ASSINATURA}}
+
+      Se não fizer sentido, é só avisar.
