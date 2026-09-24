@@ -77,7 +77,7 @@ def relatorio_texto(cfg: Config) -> str:
         veredito_tr = "abaixo da média (3,4%)"
 
     l = []
-    l.append("FUNIL DE PROSPECÇÃO — FinIntegra")
+    l.append("FUNIL DE PROSPECÇÃO — Outreach")
     l.append("=" * 46)
     l.append(f"  1º e-mails enviados .......... {d['contatos']:>5}")
     for n in (1, 2, 3):

@@ -1,4 +1,4 @@
-"""CLI do FinIntegra.
+"""CLI do Outreach.
 
 Uso:
     python -m finintegra.cli rodar [--alvo 50] [--no-enviar]
@@ -25,7 +25,7 @@ from .storage import Repository
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="finintegra", description="Prospecção FinIntegra")
+    parser = argparse.ArgumentParser(prog="finintegra", description="Prospecção Outreach")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     # opção comum a todos os comandos: sobrescreve o provedor de dados na hora

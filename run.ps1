@@ -1,4 +1,4 @@
-# Atalho para rodar a CLI do FinIntegra sem depender do PATH.
+# Atalho para rodar a CLI do Outreach sem depender do PATH.
 # Uso:  .\run.ps1 preview --n 3
 #       .\run.ps1 rodar --alvo 50
 #       .\run.ps1 auditar

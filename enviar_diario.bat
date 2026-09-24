@@ -1,6 +1,6 @@
 @echo off
 REM ============================================================================
-REM  FinIntegra - envio diario automatico (para o Agendador de Tarefas)
+REM  Outreach - envio diario automatico (para o Agendador de Tarefas)
 REM  - Roda SOMENTE em dias uteis (pula sabado e domingo).
 REM  - Envia ate o limite diario (operacao.limite_diario no config.yaml).
 REM  - Registra tudo em data\enviados.csv e loga em data\log_envios.txt.

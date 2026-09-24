@@ -1,4 +1,4 @@
-# Prospecção B2B — FinIntegra & Matchmaker
+# Radar B2B — Outreach & Matchmaker
 
 Dois produtos de **inteligência comercial B2B** construídos sobre dados públicos:
 os **dados abertos da Receita Federal** (CNPJ) e a **Dívida Ativa da União** (PGFN).
@@ -6,7 +6,7 @@ os **dados abertos da Receita Federal** (CNPJ) e a **Dívida Ativa da União** (
 | Produto | O que faz |
 |---|---|
 | 🎯 **Matchmaker** | Recebe o perfil de cliente ideal (setor, região, porte, saúde financeira…) e devolve uma **lista ranqueada de empresas** que encaixam, com export em CSV/Excel. Base de **22 milhões de empresas ativas**, busca instantânea. |
-| 📧 **FinIntegra** | Pipeline **outbound por e-mail**: acha empresas no ICP, gera/valida o contato, escreve a abordagem por nicho, envia por SMTP com cadência de follow-up e mede as respostas. |
+| 📧 **Outreach** | Pipeline **de prospecção por e-mail**: acha empresas no ICP, gera/valida o contato, escreve a abordagem por nicho, envia por SMTP com cadência de follow-up e mede as respostas. |
 
 > **Stack:** Python 3.12 · Flask · SQLite · pandas-free (CSV/sqlite puro) · openpyxl.
 > Roda 100% local. Nenhum serviço pago é obrigatório.
@@ -44,7 +44,7 @@ python -m matchmaker.divida        # marca quem tem Dívida Ativa federal (PGFN)
 
 ---
 
-## 📧 FinIntegra (outbound por e-mail)
+## 📧 Outreach: pipeline de prospecção por e-mail
 
 Pipeline modular e supervisionado. Cada camada é trocável por config, e os defaults
 rodam **sem serviço pago e sem enviar nada** (modo seguro).

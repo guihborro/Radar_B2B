@@ -3,7 +3,7 @@
 NÃO é ML (não temos histórico de 'deu match' para treinar). É um motor de
 PONTUAÇÃO por regras, transparente: cada empresa ganha um score 0-100 explicável,
 somando sinais de encaixe (porte, capital, contato, tempo de mercado). Reusa o
-provedor da Receita e os filtros de qualidade do FinIntegra.
+provedor da Receita e os filtros de qualidade do Outreach.
 """
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # Matchmaker de leads
 
-Produto paralelo ao FinIntegra. Em vez de **enviar** e-mails, aqui o cliente
+Produto paralelo ao Outreach. Em vez de **enviar** e-mails, aqui o cliente
 descreve o ICP dele num questionário e recebe uma **tabela ranqueada** de
 empresas da Receita Federal que mais se encaixam.
 
@@ -31,7 +31,7 @@ questionário (Flask/HTML)
 - **matchmaker/app.py** — rotas Flask (`/`, `/recomendar`, `/baixar/<token>.csv`).
 - **matchmaker/templates/** — `index.html` (questionário) e `resultados.html` (tabela).
 
-Reaproveita do FinIntegra: o provedor da Receita, o `ICPFilter`, os filtros de
+Reaproveita do Outreach: o provedor da Receita, o `ICPFilter`, os filtros de
 qualidade (`_dominio_proprio`, `_em_dificuldade`) e os mesmos dados em `data/receita/`.
 
 ## Score (como ranqueia)

@@ -1,4 +1,4 @@
-"""Testes do pipeline FinIntegra. Rodam 100% offline (provedor/validador mock).
+"""Testes do pipeline Outreach. Rodam 100% offline (provedor/validador mock).
 
     python -m pytest        (com pytest instalado)
 ou  python tests/test_pipeline.py   (runner embutido, sem dependências)

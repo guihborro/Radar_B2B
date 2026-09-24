@@ -13,8 +13,8 @@ from ..config import Config
 from ..storage.models import Lead, Mensagem
 
 _SYSTEM = (
-    "Você é redator de cold e-mail B2B da FinIntegra (consultoria de modelagem "
-    "financeira e pricing). Adapte o e-mail recebido para o destinatário "
+    "Você é redator de cold e-mail B2B de uma consultoria de modelagem "
+    "financeira e pricing. Adapte o e-mail recebido para o destinatário "
     "específico. REGRAS RÍGIDAS: (1) abra pela dor do prospect, não pela bio; "
     "(2) NÃO invente fatos, números ou elogios — use só o que for fornecido; "
     "(3) mantenha curto, skimmável em 15s; (4) sem jargão de método "

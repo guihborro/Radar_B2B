@@ -1,4 +1,4 @@
-"""FinIntegra — sistema de prospecção outbound B2B.
+"""Outreach — sistema de prospecção outbound B2B.
 
 Pipeline (Fase 2):
     sourcing -> enrichment -> validation -> routing -> messaging -> sending

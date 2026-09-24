@@ -18,7 +18,7 @@ from ..storage.models import Mensagem
 
 _TAGLINE = "Modelagem financeira & pricing"
 _FONTE = "Arial, Helvetica, sans-serif"
-LOGO_CID = "logo-finintegra"      # Content-ID usado no envio SMTP
+LOGO_CID = "logo-empresa"      # Content-ID usado no envio SMTP
 
 
 def logo_path(cfg: Config | None) -> Path | None:
@@ -85,7 +85,7 @@ def email_para_html(msg: Mensagem, cfg: Config | None = None,
     logo_src: URL/data-URI/cid da logo. Se None, tenta embutir assets/logo_email.png
     como data URI (para o arquivo de preview). No envio SMTP, passe "cid:...".
     """
-    marca = (cfg.get("negocio", "empresa", default="FinIntegra") if cfg else "FinIntegra") or "FinIntegra"
+    marca = (cfg.get("negocio", "empresa", default="Sua Empresa") if cfg else "Sua Empresa") or "Sua Empresa"
     if logo_src is None:
         logo_src = logo_data_uri(cfg)
 

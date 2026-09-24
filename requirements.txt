@@ -1,4 +1,4 @@
-# FinIntegra — dependências do pipeline (Fase 2)
+# Radar B2B — dependências do pipeline (Fase 2)
 # Mantido enxuto de propósito. Cada integração externa fica atrás de uma
 # interface; só instale o que for usar.
 
