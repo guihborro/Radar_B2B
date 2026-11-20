@@ -1,0 +1,59 @@
+# =============================================================================
+# CNAEs-alvo por tier (§3.2). EDITÁVEL — não hardcoded.
+# -----------------------------------------------------------------------------
+# Os códigos abaixo são os [RECOMENDAÇÃO] do brief, em nível de divisão/grupo.
+# Refine para subclasses exatas (formato 0000-0/00) quando os sócios definirem.
+# O matcher do código compara por PREFIXO, então "29" casa qualquer CNAE que
+# comece com 29 (ex.: 2949-2/99). Isso deixa começar amplo e ir afunilando.
+# =============================================================================
+
+tiers:
+  tier1:                            # encaixe mais forte
+    - codigo: "29"
+      nome: "Fabricação de autopeças / veículos"
+    - codigo: "4530"
+      nome: "Comércio de peças e acessórios p/ veículos"
+    - codigo: "25"
+      nome: "Metalmecânica / produtos de metal / usinagem"
+    - codigo: "22"
+      nome: "Transformação de plásticos e borracha"
+
+  tier2:                            # forte
+    - codigo: "28"
+      nome: "Máquinas e equipamentos sob encomenda"
+    - codigo: "10"
+      nome: "Alimentos (pequeno-médio porte)"
+    - codigo: "11"
+      nome: "Bebidas (pequeno-médio porte)"
+    - codigo: "26"
+      nome: "Eletroeletrônicos / componentes"
+    - codigo: "27"
+      nome: "Máquinas, aparelhos e materiais elétricos / montagem"
+
+  tier3:                            # cuidado com capacidade de pagar
+    - codigo: "13"
+      nome: "Têxtil"
+    - codigo: "14"
+      nome: "Confecção / vestuário"
+    - codigo: "31"
+      nome: "Móveis"
+    - codigo: "23"
+      nome: "Materiais de construção (minerais não-metálicos)"
+
+  agro:                             # agronegócio (adicionado a pedido)
+    - codigo: "01"
+      nome: "Agricultura, pecuária e serviços relacionados"
+    - codigo: "4623"
+      nome: "Comércio atacadista de insumos agropecuários"
+
+# Mapa CNAE -> qual template de nicho usar (arquivo em config/templates/).
+# Se um CNAE não estiver aqui, cai no template "industria_generico".
+template_por_cnae:
+  "29": "autopecas"
+  "4530": "autopecas"
+  "25": "usinagem"
+  "22": "plasticos"
+  "01": "agro"
+  "4623": "agro"
+  # tier2/tier3 ainda sem template dedicado -> usam o genérico (ver default).
+default_template: "industria_generico"

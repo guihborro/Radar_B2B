@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matchmaker — encontre as empresas certas</title>
+<style>
+  :root { --verde:#173b32; --acento:#1f7a5e; --linha:#e2e6ea; --cinza:#6b7680; --bg:#f4f6f8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:#1f2a30; }
+  .wrap { max-width:900px; margin:0 auto; padding:32px 20px 64px; }
+  header h1 { margin:0 0 4px; font-size:26px; color:var(--verde); }
+  header p { margin:0 0 24px; color:var(--cinza); }
+  .card { background:#fff; border:1px solid var(--linha); border-radius:12px; padding:22px 24px; margin-bottom:18px; }
+  .card h2 { margin:0 0 4px; font-size:16px; }
+  .card .hint { margin:0 0 14px; font-size:13px; color:var(--cinza); }
+  .grupo { margin-bottom:14px; }
+  .grupo > span { display:block; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--acento); font-weight:600; margin-bottom:6px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { position:relative; }
+  .chip input { position:absolute; opacity:0; }
+  .chip label { display:inline-block; padding:7px 12px; border:1px solid var(--linha); border-radius:20px; font-size:13px; cursor:pointer; background:#fbfcfd; user-select:none; }
+  .chip input:checked + label { background:var(--acento); color:#fff; border-color:var(--acento); }
+  .row { display:flex; flex-wrap:wrap; gap:18px; }
+  .field { flex:1; min-width:180px; }
+  .field label { display:block; font-size:13px; margin-bottom:5px; color:#2a3239; font-weight:500; }
+  input[type=number], input[type=text], select[multiple], select { width:100%; padding:9px 10px; border:1px solid var(--linha); border-radius:8px; font-size:14px; background:#fff; }
+  select[multiple] { height:130px; }
+  .moneywrap { display:flex; align-items:stretch; border:1px solid var(--linha); border-radius:8px; overflow:hidden; background:#fff; }
+  .moneywrap span { display:flex; align-items:center; padding:0 11px; background:#f1f4f6; color:var(--cinza); font-size:14px; font-weight:600; border-right:1px solid var(--linha); }
+  .moneywrap input { border:0 !important; border-radius:0 !important; font-variant-numeric:tabular-nums; }
+  .tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:7px; }
+  .tags .tag { background:var(--acento); color:#fff; border-radius:16px; padding:4px 6px 4px 11px; font-size:13px; display:inline-flex; align-items:center; gap:8px; }
+  .tags .tag b { cursor:pointer; font-weight:700; line-height:1; }
+  .checks { display:flex; flex-wrap:wrap; gap:16px; }
+  .checks label { font-size:14px; display:flex; align-items:center; gap:7px; cursor:pointer; }
+  .erro { background:#fde8e8; border:1px solid #f5b5b5; color:#a12a2a; padding:12px 16px; border-radius:8px; margin-bottom:16px; font-size:14px; }
+  .aviso { font-size:12.5px; color:var(--cinza); margin-top:10px; }
+  button { background:var(--verde); color:#fff; border:0; border-radius:10px; padding:14px 26px; font-size:15px; font-weight:600; cursor:pointer; }
+  button:hover { background:#0f2a23; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Matchmaker de leads</h1>
+    <p>Descreva o cliente ideal e receba uma lista ranqueada de empresas da base da Receita Federal.</p>
+  </header>
+
+  {% if erro %}<div class="erro">{{ erro }}</div>{% endif %}
+
+  <form method="post" action="/recomendar">
+    <div class="card">
+      <h2>1. Que setores você quer prospectar?</h2>
+      <p class="hint">Escolha um ou mais. Digite para buscar (ex.: supermercado, farmácia, restaurante).</p>
+      <input type="text" id="buscaSetor" placeholder="🔎 Buscar setor..."
+             style="width:100%;padding:10px 12px;border:1px solid var(--linha);border-radius:8px;font-size:14px;margin-bottom:14px;">
+      <div id="setoresBox">
+      {% for grupo, itens in grupos.items() %}
+      <div class="grupo">
+        <span>{{ grupo }}</span>
+        <div class="chips">
+          {% for s in itens %}
+          <div class="chip">
+            <input type="checkbox" name="setores" id="s_{{ s.id }}" value="{{ s.id }}">
+            <label for="s_{{ s.id }}">{{ s.nome }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Região</h2>
+      <p class="hint">Marque quantos estados quiser. Nada selecionado = Brasil todo.</p>
+      <div class="chips">
+        {% for uf in ufs %}
+        <div class="chip">
+          <input type="checkbox" name="ufs" id="uf_{{ uf }}" value="{{ uf }}">
+          <label for="uf_{{ uf }}">{{ uf }}</label>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Cidades (opcional) — marque estados acima, depois escolha as cidades</label>
+        <div id="cidadesTags" class="tags"></div>
+        <input type="text" id="cidadeInput" list="cidadesList" autocomplete="off"
+               placeholder="marque um estado, depois digite a cidade..."
+               style="width:100%;padding:9px 10px;border:1px solid var(--linha);border-radius:8px;font-size:14px;">
+        <datalist id="cidadesList"></datalist>
+        <p class="hint" style="margin-top:6px;">Estado com cidades escolhidas = só elas; estado sem cidade escolhida = todas.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Porte e tamanho</h2>
+      <p class="hint">Deixe o porte vazio para aceitar todos.</p>
+      <div class="grupo">
+        <span>Porte (Receita)</span>
+        <div class="checks">
+          <label><input type="checkbox" name="portes" value="01"> ME (micro)</label>
+          <label><input type="checkbox" name="portes" value="03"> EPP (pequena/média)</label>
+          <label><input type="checkbox" name="portes" value="05"> Grande ("Demais")</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Capital social mínimo</label>
+          <div class="moneywrap"><span>R$</span><input type="text" inputmode="numeric" class="money" name="capital_min" placeholder="0"></div>
+        </div>
+        <div class="field">
+          <label>Capital social máximo</label>
+          <div class="moneywrap"><span>R$</span><input type="text" inputmode="numeric" class="money" name="capital_max" placeholder="sem teto"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Idade mínima (anos)</label>
+          <input type="number" name="idade_min" min="0" step="1" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Idade máxima (anos)</label>
+          <input type="number" name="idade_max" min="0" step="1" placeholder="sem teto">
+        </div>
+        <div class="field">
+          <label>Quantas empresas retornar</label>
+          <input type="number" name="n" min="1" max="500" value="50">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Natureza jurídica</label>
+          <select name="natureza" style="width:100%;padding:9px 10px;border:1px solid var(--linha);border-radius:8px;font-size:14px;background:#fff;">
+            <option value="">Qualquer</option>
+            <option value="ltda">Somente LTDA</option>
+            <option value="sa">Somente S.A. (todas)</option>
+            <option value="sa_aberta">S.A. aberta</option>
+            <option value="sa_fechada">S.A. fechada</option>
+            <option value="eireli">EIRELI</option>
+            <option value="cooperativa">Cooperativa</option>
+            <option value="associacao">Associação</option>
+            <option value="empresario">Empresário individual</option>
+          </select>
+        </div>
+        <div class="field" style="display:flex;flex-direction:column;justify-content:flex-end;gap:9px;">
+          <label style="font-weight:400;display:flex;align-items:center;gap:7px;cursor:pointer;">
+            <input type="checkbox" name="so_matriz"> Só matriz
+          </label>
+          <label style="font-weight:400;display:flex;align-items:center;gap:7px;cursor:pointer;">
+            <input type="checkbox" name="so_filial"> Só filiais
+          </label>
+        </div>
+      </div>
+      <div class="grupo" style="margin-top:14px;">
+        <span>Regime tributário</span>
+        <div class="checks">
+          <label><input type="checkbox" name="so_simples"> Só optantes do Simples/MEI</label>
+          <label><input type="checkbox" name="excluir_simples"> Excluir Simples (só lucro real / maiores)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. Qualidade do contato e exclusões</h2>
+      <div class="grupo">
+        <span>Só empresas que tenham</span>
+        <div class="checks">
+          <label><input type="checkbox" name="exigir_email"> e-mail</label>
+          <label><input type="checkbox" name="exigir_telefone"> telefone</label>
+          <label><input type="checkbox" name="exigir_dominio"> domínio próprio (site)</label>
+          <label><input type="checkbox" name="so_decisor"> decisor/sócio identificado</label>
+        </div>
+      </div>
+      <div class="grupo">
+        <span>Excluir</span>
+        <div class="checks">
+          <label><input type="checkbox" name="excluir_mei" checked> MEI / Empresário individual</label>
+          <label><input type="checkbox" name="excluir_recjud" checked> Recuperação judicial / falência</label>
+        </div>
+      </div>
+      <div class="grupo">
+        <span>Site</span>
+        <div class="checks">
+          <label><input type="checkbox" name="verificar_site" checked> Verificar se o site está no ar antes de linkar <span style="color:var(--cinza)">(deixa a busca um pouco mais lenta)</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>5. Filtros avançados</h2>
+      <div class="grupo">
+        <span>Dívida ativa federal (PGFN)</span>
+        <select name="divida" style="width:100%;max-width:420px;padding:9px 10px;border:1px solid var(--linha);border-radius:8px;font-size:14px;background:#fff;">
+          <option value="">Tanto faz</option>
+          <option value="sem">Só empresas SEM dívida federal (mais saudáveis)</option>
+          <option value="com">Só empresas COM dívida federal</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Mín. de estabelecimentos (rede/franquia)</label>
+          <input type="number" name="n_estab_min" min="0" step="1" placeholder="ex.: 5">
+        </div>
+        <div class="field">
+          <label>Nº de sócios (mín)</label>
+          <input type="number" name="socios_min" min="0" step="1" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Nº de sócios (máx)</label>
+          <input type="number" name="socios_max" min="0" step="1" placeholder="sem teto">
+        </div>
+        <div class="field">
+          <label>CEP começa com</label>
+          <input type="text" name="cep_prefixo" inputmode="numeric" placeholder="ex.: 13010">
+        </div>
+      </div>
+      <div class="grupo" style="margin-top:12px;">
+        <span>Outros</span>
+        <div class="checks">
+          <label><input type="checkbox" name="so_estrangeiro"> Só com sócio estrangeiro (multinacional)</label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Também atua em (CNAE secundário) — opcional</label>
+        <div id="setoresSecTags" class="tags"></div>
+        <input type="text" id="setorSecInput" list="setoresSecList" autocomplete="off"
+               placeholder="digite um setor que a empresa TAMBÉM faça..."
+               style="width:100%;padding:9px 10px;border:1px solid var(--linha);border-radius:8px;font-size:14px;">
+        <datalist id="setoresSecList">
+          {% for grupo, itens in grupos.items() %}{% for s in itens %}<option value="{{ s.nome }}">{% endfor %}{% endfor %}
+        </datalist>
+      </div>
+    </div>
+
+    <button type="submit">Gerar lista de empresas</button>
+    <p class="aviso">Busca instantânea sobre 22 milhões de empresas ativas do Brasil.</p>
+  </form>
+</div>
+<script>
+  // formata os campos de dinheiro com separador de milhar (pt-BR) enquanto digita
+  document.querySelectorAll('input.money').forEach(function (inp) {
+    inp.addEventListener('input', function () {
+      var d = inp.value.replace(/\D/g, '');
+      inp.value = d ? Number(d).toLocaleString('pt-BR') : '';
+    });
+  });
+
+  // === cidade POR ESTADO: autocomplete filtrado pelos UFs marcados ===
+  var cidInput = document.getElementById('cidadeInput');
+  var cidBox = document.getElementById('cidadesTags');
+  var cidList = document.getElementById('cidadesList');
+  var mapaCidades = {};   // "cidade (uf)" -> {uf, cidade}
+
+  function ufsMarcados() {
+    return Array.prototype.slice.call(document.querySelectorAll('input[name="ufs"]:checked'))
+      .map(function (c) { return c.value; });
+  }
+  function carregarCidades() {
+    var ufs = ufsMarcados();
+    if (!ufs.length) { if (cidList) cidList.innerHTML = ''; mapaCidades = {}; return; }
+    fetch('/cidades?ufs=' + ufs.join(',')).then(function (r) { return r.json(); })
+      .then(function (data) {
+        cidList.innerHTML = ''; mapaCidades = {};
+        Object.keys(data).forEach(function (uf) {
+          data[uf].forEach(function (cid) {
+            var label = cid + ' (' + uf + ')';
+            mapaCidades[label.toLowerCase()] = { uf: uf, cidade: cid };
+            var opt = document.createElement('option'); opt.value = label; cidList.appendChild(opt);
+          });
+        });
+      });
+  }
+  function addChipCidade(uf, cidade) {
+    var tag = document.createElement('span'); tag.className = 'tag';
+    var hid = document.createElement('input'); hid.type = 'hidden'; hid.name = 'cidade';
+    hid.value = uf + '|' + cidade;
+    var txt = document.createElement('span'); txt.textContent = cidade + ' (' + uf + ')';
+    var x = document.createElement('b'); x.textContent = '×'; x.onclick = function () { tag.remove(); };
+    tag.appendChild(hid); tag.appendChild(txt); tag.appendChild(x); cidBox.appendChild(tag);
+  }
+  if (cidInput) {
+    document.querySelectorAll('input[name="ufs"]').forEach(function (c) {
+      c.addEventListener('change', carregarCidades);
+    });
+    function tentarAdd() {
+      var m = mapaCidades[cidInput.value.trim().toLowerCase()];
+      if (m) { addChipCidade(m.uf, m.cidade); cidInput.value = ''; }
+    }
+    cidInput.addEventListener('change', tentarAdd);
+    cidInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); tentarAdd(); } });
+  }
+
+  // busca de setores: filtra os chips pelo nome (ignora acento) enquanto digita
+  var busca = document.getElementById('buscaSetor');
+  if (busca) {
+    var norm = function (s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
+    busca.addEventListener('input', function () {
+      var q = norm(busca.value.trim());
+      document.querySelectorAll('#setoresBox .grupo').forEach(function (g) {
+        var algum = false;
+        g.querySelectorAll('.chip').forEach(function (c) {
+          var txt = norm(c.querySelector('label').textContent);
+          var visivel = !q || txt.indexOf(q) !== -1 || c.querySelector('input').checked;
+          c.style.display = visivel ? '' : 'none';
+          if (visivel) algum = true;
+        });
+        g.style.display = algum ? '' : 'none';
+      });
+    });
+  }
+
+  // === setor secundário (CNAE secundário): autocomplete -> chips (name=setores_sec) ===
+  var setSecInput = document.getElementById('setorSecInput');
+  var setSecBox = document.getElementById('setoresSecTags');
+  var SETORES_MAP = {};
+  document.querySelectorAll('#setoresBox .chip').forEach(function (c) {
+    SETORES_MAP[c.querySelector('label').textContent.trim().toLowerCase()] = c.querySelector('input').value;
+  });
+  function addChipSetorSec(id, nome) {
+    var tag = document.createElement('span'); tag.className = 'tag';
+    var hid = document.createElement('input'); hid.type = 'hidden'; hid.name = 'setores_sec'; hid.value = id;
+    var txt = document.createElement('span'); txt.textContent = nome;
+    var x = document.createElement('b'); x.textContent = '×'; x.onclick = function () { tag.remove(); };
+    tag.appendChild(hid); tag.appendChild(txt); tag.appendChild(x); setSecBox.appendChild(tag);
+  }
+  if (setSecInput) {
+    function tentarAddSec() {
+      var nome = setSecInput.value.trim();
+      var id = SETORES_MAP[nome.toLowerCase()];
+      if (id) { addChipSetorSec(id, nome); setSecInput.value = ''; }
+    }
+    setSecInput.addEventListener('change', tentarAddSec);
+    setSecInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); tentarAddSec(); } });
+  }
+</script>
+</body>
+</html>
