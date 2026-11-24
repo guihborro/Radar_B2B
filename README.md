@@ -24,9 +24,13 @@ O código é genérico. Tudo o que é específico do negócio fica em `config/`.
 
 ## Resultados
 
-- Empresas selecionadas pelo filtro de perfil: `TODO(Guilherme): número`
-- E-mails enviados: `TODO(Guilherme): número`
-- Taxa de resposta: `TODO(Guilherme): número`
+- **Matchmaker: validado com buscas reais.** Dado um perfil de cliente (setor por CNAE,
+  cidade ou UF, porte, faixa de capital social e tempo de abertura; por exemplo,
+  supermercados de Cuiabá-MT), ele devolve uma lista ranqueada das empresas que se encaixam.
+- **Outreach: o envio em volume não chegou a produção.** O pipeline monta, valida e
+  personaliza os e-mails, mas as regras anti-spam e os limites de envio do Gmail travaram
+  o disparo automático. O próximo passo seria um provedor de e-mail transacional com
+  domínio próprio autenticado.
 
 ---
 
